@@ -46,7 +46,7 @@ void Init_UART5(unsigned int boud) {
     gpio_init(GPIOD, &gpio);
 
     // USART 时钟配置, 不使用同步模式,故清零
-    usart_init_clock(UART5, USART_CR2_CPHA);
+    usart_init_clock(UART5, 0);
     // USART 初始化配置
     usart_conf_t conf;
     conf.baud_rate = boud;

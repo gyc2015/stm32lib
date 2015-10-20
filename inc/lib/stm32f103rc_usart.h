@@ -6,19 +6,18 @@
 typedef struct {
     volatile uint16 SR;     /* 状态寄存器, Status Register */
     uint16  RESERVED0;
-    volatile uint8 DR;      /* 数据寄存器, Data Register */
-    uint8   RESERVED1;
-    uint16  RESERVED2;
+    volatile uint16 DR;      /* 数据寄存器, Data Register */
+    uint16  RESERVED1;
     volatile uint16 BRR;    /* 波特率寄存器, Baud Rate Register */
-    uint16  RESERVED3;
+    uint16  RESERVED2;
     volatile uint16 CR1;    /* 控制寄存器1, Control Register 1 */
-    uint16  RESERVED4;
+    uint16  RESERVED3;
     volatile uint16 CR2;    /* 控制寄存器2, Control Register 2 */
-    uint16  RESERVED5;
+    uint16  RESERVED4;
     volatile uint16 CR3;    /* 控制寄存器3, Control Rergister 3 */
-    uint16  RESERVED6;
+    uint16  RESERVED5;
     volatile uint16 GTPR;   /* 保护时间和预分频寄存器, Guard time and prescaler register */
-    uint16  RESERVED7;
+    uint16  RESERVED6;
 } usart_regs_t;
 
 /* USART寄存器地址映射 */
@@ -131,6 +130,16 @@ typedef struct {
 #define USART_LastBit_Enable    ((uint16)0x0100)
 #define USART_Clock_Mask        ((uint16)0x0F00)
 
+/*
+ * usart_init_clock - 初始化串口同步模式时钟
+ *
+ * 不工作在同步模式时,建议清零
+ *
+ * @USARTx: 串口寄存器指针访问
+ * @conf: 同步时钟配置
+ */
+void usart_init_clock(usart_regs_t *USARTx, uint16 conf);
+
 /************************************************/
 /* 串口的通用配置
  */
@@ -187,15 +196,6 @@ typedef struct {
 */
 void usart_init(usart_regs_t *USARTx, const usart_conf_t *conf);
 
-/*
-* usart_init_clock - 初始化串口同步模式时钟
-*
-* 不工作在同步模式时,建议清零
-*
-* @USARTx: 串口寄存器指针访问
-* @conf: 同步时钟配置
-*/
-void usart_init_clock(usart_regs_t *USARTx, uint16 conf);
 /*
  * usart_enable - 使能串口
  *
