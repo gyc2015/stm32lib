@@ -14,6 +14,12 @@
 #define AHB_BASE    (PERIPH_BASE + 0x20000)
 
 /************************************************/
+/* 硬件时钟环境
+ */
+#define HSI_FREQ    ((uint32)8000000)
+#define HSE_FREQ    ((uint32)8000000)
+
+/************************************************/
 /* Cortex-M3的内存映射中有两个区域支持位映射(bit-band)
  * 在STM32F10xxx系列的芯片中这个区域分别对应SRAM的64kB空间和外设地址空间
  */
@@ -30,5 +36,10 @@
  * @number: 目标位在字节中的位编号(0-7)
  */
 #define BIT_WORD_ADDR(base, offset, number) ((base) + ((offset) * 32) + ((number) * 4))
+
+/************************************************/
+/* 断言函数
+ */
+#define assert(e) do {} while(0)
 
 #endif

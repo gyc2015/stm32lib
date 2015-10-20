@@ -17,7 +17,27 @@ typedef unsigned char const     ucint8;
 typedef unsigned short const    ucint16;
 typedef unsigned long const     ucint32;
 
-#define FALSE   0
+typedef unsigned char   bool;
+
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
+#ifndef NULL
+#define NULL 0
+#endif
+
+#ifndef BV
+#define BV(n)      (1 << (n))
+#endif
+
+#define HI_UINT16(a) (((a) >> 8) & 0xFF)
+#define LO_UINT16(a) ((a) & 0xFF)
+
 
 #define INT8_MIN    -128
 #define INT16_MIN   -32768

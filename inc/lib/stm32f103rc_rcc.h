@@ -68,12 +68,12 @@ typedef struct {
 #define RCC_CR_CSSON        ((uint32)0x00080000)        /* 时钟安全系统 使能 */
 #define RCC_CR_PLLON        ((uint32)0x01000000)        /* PLL         使能 */
 #define RCC_CR_PLLRDY       ((uint32)0x02000000)        /* PLL         就绪 */
- /*
-  * 时钟配置寄存器 RCC_CFGR
-  * 偏移地址: 0x04
-  * 复位值: 0x0000 0000
-  * 访问: 当访问发生在时钟切换时会有1或者两个等待周期, word/half-word/byte访问
-  */
+/*
+ * 时钟配置寄存器 RCC_CFGR
+ * 偏移地址: 0x04
+ * 复位值: 0x0000 0000
+ * 访问: 当访问发生在时钟切换时会有1或者两个等待周期, word/half-word/byte访问
+ */
 #define RCC_CFGR_RESET_VALUE    ((uint32)0x00000000)    /* 复位值 */
 
 #define RCC_CFGR_SW             ((uint32)0x00000003)    /* 系统时钟源选择位 SW[1:0]*/
@@ -119,6 +119,7 @@ typedef struct {
 
 #define RCC_CFGR_PLLSRC         ((uint32)0x00010000)    /* PLL时钟源,0:HSI经2分频后,1:HSE */
 #define RCC_CFGR_PLLXTPRE       ((uint32)0x00020000)    /* 0:HSE不分频,1:2分频 */
+#define RCC_CFGR_PLLSRC_Mask    ((uint32)0x00030000)
 #define RCC_CFGR_PLLSRC_HSIDiv2 ((uint32)0x00000000)    /* HSI经2分频后输入PLL */
 #define RCC_CFGR_PLLSRC_HSEDIV1 ((uint32)0x00010000)    /* HSE不分频输入PLL */
 #define RCC_CFGR_PLLSRC_HSEDIV2 ((uint32)0x00030000)    /* HSE经2分频后输入PLL */
@@ -177,58 +178,58 @@ typedef struct {
 #define RCC_CIE_ALLE            ((uint32)0x00001F00)        /* 打开所有中断 */
 #define RCC_CIR_ALLC            ((uint32)0x009F0000)        /* 清除所有中断标志 */
  /*
-  * 高速外设(APB2)复位寄存器 RCC_APB2RSTR
+  * 高速外设(APB2)复位寄存器 APB2RSTR
   * 偏移地址: 0x0C
   * 复位值: 0x0000 0000
   * 访问: 没有等待状态, word/half-word/byte访问
   */
-#define RCC_APB2RSTR_AFIORST    ((uint32)0x00000001)        /* 辅助功能I/O复位 */
-#define RCC_APB2RSTR_IOPARST    ((uint32)0x00000004)        /* IO端口A复位 */
-#define RCC_APB2RSTR_IOPBRST    ((uint32)0x00000008)        /* IO端口B复位 */
-#define RCC_APB2RSTR_IOPCRST    ((uint32)0x00000010)        /* IO端口C复位 */
-#define RCC_APB2RSTR_IOPDRST    ((uint32)0x00000020)        /* IO端口D复位 */
-#define RCC_APB2RSTR_IOPERST    ((uint32)0x00000040)        /* IO端口E复位 */
-#define RCC_APB2RSTR_IOPFRST    ((uint32)0x00000080)        /* IO端口F复位 */
-#define RCC_APB2RSTR_IOPGRST    ((uint32)0x00000100)        /* IO端口G复位 */
-#define RCC_APB2RSTR_ADC1RST    ((uint32)0x00000200)        /* ADC1 */
-#define RCC_APB2RSTR_ADC2RST    ((uint32)0x00000400)        /* ADC2 */
-#define RCC_APB2RSTR_TIM1RST    ((uint32)0x00000800)        /* TIM1 */
-#define RCC_APB2RSTR_SPI1RST    ((uint32)0x00001000)        /* SPI1 */
-#define RCC_APB2RSTR_TIM8RST    ((uint32)0x00002000)        /* TIM8 */
-#define RCC_APB2RSTR_USART1RST  ((uint32)0x00004000)        /* USART1 */
-#define RCC_APB2RSTR_ADC3RST    ((uint32)0x00008000)        /* ADC3 */
-#define RCC_APB2RSTR_TIM9RST    ((uint32)0x00080000)        /* TIM9 */
-#define RCC_APB2RSTR_TIM10RST   ((uint32)0x00100000)        /* TIM10 */
-#define RCC_APB2RSTR_TIM11RST   ((uint32)0x00200000)        /* TIM11 */
+#define APB2RSTR_AFIORST    ((uint32)0x00000001)        /* 辅助功能I/O复位 */
+#define APB2RSTR_IOPARST    ((uint32)0x00000004)        /* IO端口A复位 */
+#define APB2RSTR_IOPBRST    ((uint32)0x00000008)        /* IO端口B复位 */
+#define APB2RSTR_IOPCRST    ((uint32)0x00000010)        /* IO端口C复位 */
+#define APB2RSTR_IOPDRST    ((uint32)0x00000020)        /* IO端口D复位 */
+#define APB2RSTR_IOPERST    ((uint32)0x00000040)        /* IO端口E复位 */
+#define APB2RSTR_IOPFRST    ((uint32)0x00000080)        /* IO端口F复位 */
+#define APB2RSTR_IOPGRST    ((uint32)0x00000100)        /* IO端口G复位 */
+#define APB2RSTR_ADC1RST    ((uint32)0x00000200)        /* ADC1 */
+#define APB2RSTR_ADC2RST    ((uint32)0x00000400)        /* ADC2 */
+#define APB2RSTR_TIM1RST    ((uint32)0x00000800)        /* TIM1 */
+#define APB2RSTR_SPI1RST    ((uint32)0x00001000)        /* SPI1 */
+#define APB2RSTR_TIM8RST    ((uint32)0x00002000)        /* TIM8 */
+#define APB2RSTR_USART1RST  ((uint32)0x00004000)        /* USART1 */
+#define APB2RSTR_ADC3RST    ((uint32)0x00008000)        /* ADC3 */
+#define APB2RSTR_TIM9RST    ((uint32)0x00080000)        /* TIM9 */
+#define APB2RSTR_TIM10RST   ((uint32)0x00100000)        /* TIM10 */
+#define APB2RSTR_TIM11RST   ((uint32)0x00200000)        /* TIM11 */
  /*
-  * 低速外设(APB1)复位寄存器 RCC_APB1RSTR
+  * 低速外设(APB1)复位寄存器 APB1RSTR
   * 偏移地址: 0x10
   * 复位值: 0x0000 0000
   * 访问: 没有等待状态, word/half-word/byte访问
   */
-#define RCC_APB1RSTR_TIM2RST    ((uint32)0x00000001)        /* TIM2 */
-#define RCC_APB1RSTR_TIM3RST    ((uint32)0x00000002)        /* TIM3 */
-#define RCC_APB1RSTR_TIM4RST    ((uint32)0x00000004)        /* TIM4 */
-#define RCC_APB1RSTR_TIM5RST    ((uint32)0x00000008)        /* TIM5 */
-#define RCC_APB1RSTR_TIM6RST    ((uint32)0x00000010)        /* TIM6 */
-#define RCC_APB1RSTR_TIM7RST    ((uint32)0x00000020)        /* TIM7 */
-#define RCC_APB1RSTR_TIM12RST   ((uint32)0x00000040)        /* TIM12 */
-#define RCC_APB1RSTR_TIM13RST   ((uint32)0x00000080)        /* TIM13 */
-#define RCC_APB1RSTR_TIM14RST   ((uint32)0x00000100)        /* TIM14 */
-#define RCC_APB1RSTR_WWDGRST    ((uint32)0x00000800)        /* WWDG */
-#define RCC_APB1RSTR_SPI2RST    ((uint32)0x00004000)        /* SPI2 */
-#define RCC_APB1RSTR_SPI3RST    ((uint32)0x00008000)        /* SPI3 */
-#define RCC_APB1RSTR_USART2RST  ((uint32)0x00020000)        /* USART2 */
-#define RCC_APB1RSTR_USART3RST  ((uint32)0x00040000)        /* USART3 */
-#define RCC_APB1RSTR_USART4RST  ((uint32)0x00080000)        /* USART4 */
-#define RCC_APB1RSTR_UART5RST   ((uint32)0x00100000)        /* UART5 */
-#define RCC_APB1RSTR_I2C1RST    ((uint32)0x00200000)        /* I2C1 */
-#define RCC_APB1RSTR_I2C2RST    ((uint32)0x00400000)        /* I2C2 */
-#define RCC_APB1RSTR_USBRST     ((uint32)0x00800000)        /* USB */
-#define RCC_APB1RSTR_CANRST     ((uint32)0x02000000)        /* CAN */
-#define RCC_APB1RSTR_BKPRST     ((uint32)0x08000000)        /* Backup interface */
-#define RCC_APB1RSTR_PWRRST     ((uint32)0x10000000)        /* Power interface */
-#define RCC_APB1RSTR_DACRST     ((uint32)0x20000000)        /* DAC interface */
+#define APB1RSTR_TIM2RST    ((uint32)0x00000001)        /* TIM2 */
+#define APB1RSTR_TIM3RST    ((uint32)0x00000002)        /* TIM3 */
+#define APB1RSTR_TIM4RST    ((uint32)0x00000004)        /* TIM4 */
+#define APB1RSTR_TIM5RST    ((uint32)0x00000008)        /* TIM5 */
+#define APB1RSTR_TIM6RST    ((uint32)0x00000010)        /* TIM6 */
+#define APB1RSTR_TIM7RST    ((uint32)0x00000020)        /* TIM7 */
+#define APB1RSTR_TIM12RST   ((uint32)0x00000040)        /* TIM12 */
+#define APB1RSTR_TIM13RST   ((uint32)0x00000080)        /* TIM13 */
+#define APB1RSTR_TIM14RST   ((uint32)0x00000100)        /* TIM14 */
+#define APB1RSTR_WWDGRST    ((uint32)0x00000800)        /* WWDG */
+#define APB1RSTR_SPI2RST    ((uint32)0x00004000)        /* SPI2 */
+#define APB1RSTR_SPI3RST    ((uint32)0x00008000)        /* SPI3 */
+#define APB1RSTR_USART2RST  ((uint32)0x00020000)        /* USART2 */
+#define APB1RSTR_USART3RST  ((uint32)0x00040000)        /* USART3 */
+#define APB1RSTR_USART4RST  ((uint32)0x00080000)        /* USART4 */
+#define APB1RSTR_UART5RST   ((uint32)0x00100000)        /* UART5 */
+#define APB1RSTR_I2C1RST    ((uint32)0x00200000)        /* I2C1 */
+#define APB1RSTR_I2C2RST    ((uint32)0x00400000)        /* I2C2 */
+#define APB1RSTR_USBRST     ((uint32)0x00800000)        /* USB */
+#define APB1RSTR_CANRST     ((uint32)0x02000000)        /* CAN */
+#define APB1RSTR_BKPRST     ((uint32)0x08000000)        /* Backup interface */
+#define APB1RSTR_PWRRST     ((uint32)0x10000000)        /* Power interface */
+#define APB1RSTR_DACRST     ((uint32)0x20000000)        /* DAC interface */
  /*
   * 总线外设(AHB)时钟使能寄存器 RCC_AHBENR
   * 偏移地址: 0x14
@@ -243,58 +244,58 @@ typedef struct {
 #define RCC_AHBENR_FSMCEN       ((uint16)0x0100)            /* FSMC */
 #define RCC_AHBENR_SDIOEN       ((uint16)0x0400)            /* SDIO */
  /*
-  * 高速总线外设(APB2)时钟使能寄存器 RCC_APB2ENR
+  * 高速总线外设(APB2)时钟使能寄存器 APB2ENR
   * 偏移地址: 0x18
   * 复位值: 0x0000 0000
   * 访问: 没有等待状态, word/half-word/byte访问
   */
-#define RCC_APB2ENR_AFIOEN      ((uint32)0x00000001)        /* 辅助I/O时钟使能 */
-#define RCC_APB2ENR_IOPAEN      ((uint32)0x00000004)        /* A */
-#define RCC_APB2ENR_IOPBEN      ((uint32)0x00000008)        /* B */
-#define RCC_APB2ENR_IOPCEN      ((uint32)0x00000010)        /* C */
-#define RCC_APB2ENR_IOPDEN      ((uint32)0x00000020)        /* D */
-#define RCC_APB2ENR_IOPEEN      ((uint32)0x00000040)        /* E */
-#define RCC_APB2ENR_IOPFEN      ((uint32)0x00000080)        /* F */
-#define RCC_APB2ENR_IOPGEN      ((uint32)0x00000100)        /* G */
-#define RCC_APB2ENR_ADC1EN      ((uint32)0x00000200)        /* ADC1 */
-#define RCC_APB2ENR_ADC2EN      ((uint32)0x00000400)        /* ADC2 */
-#define RCC_APB2ENR_TIM1EN      ((uint32)0x00000800)        /* TIM1 */
-#define RCC_APB2ENR_SPI1EN      ((uint32)0x00001000)        /* SPI1 */
-#define RCC_APB2ENR_TIM8EN      ((uint32)0x00002000)        /* TIM8 */
-#define RCC_APB2ENR_USART1EN    ((uint32)0x00004000)        /* USART1 */
-#define RCC_APB2ENR_ADC3EN      ((uint32)0x00008000)        /* ADC3 */
-#define RCC_APB2ENR_TIM9EN      ((uint32)0x00080000)        /* TIM9 */
-#define RCC_APB2ENR_TIM10EN     ((uint32)0x00100000)        /* TIM10 */
-#define RCC_APB2ENR_TIM11EN     ((uint32)0x00200000)        /* TIM11 */
+#define APB2ENR_AFIOEN      ((uint32)0x00000001)        /* 辅助I/O时钟使能 */
+#define APB2ENR_IOPAEN      ((uint32)0x00000004)        /* A */
+#define APB2ENR_IOPBEN      ((uint32)0x00000008)        /* B */
+#define APB2ENR_IOPCEN      ((uint32)0x00000010)        /* C */
+#define APB2ENR_IOPDEN      ((uint32)0x00000020)        /* D */
+#define APB2ENR_IOPEEN      ((uint32)0x00000040)        /* E */
+#define APB2ENR_IOPFEN      ((uint32)0x00000080)        /* F */
+#define APB2ENR_IOPGEN      ((uint32)0x00000100)        /* G */
+#define APB2ENR_ADC1EN      ((uint32)0x00000200)        /* ADC1 */
+#define APB2ENR_ADC2EN      ((uint32)0x00000400)        /* ADC2 */
+#define APB2ENR_TIM1EN      ((uint32)0x00000800)        /* TIM1 */
+#define APB2ENR_SPI1EN      ((uint32)0x00001000)        /* SPI1 */
+#define APB2ENR_TIM8EN      ((uint32)0x00002000)        /* TIM8 */
+#define APB2ENR_USART1EN    ((uint32)0x00004000)        /* USART1 */
+#define APB2ENR_ADC3EN      ((uint32)0x00008000)        /* ADC3 */
+#define APB2ENR_TIM9EN      ((uint32)0x00080000)        /* TIM9 */
+#define APB2ENR_TIM10EN     ((uint32)0x00100000)        /* TIM10 */
+#define APB2ENR_TIM11EN     ((uint32)0x00200000)        /* TIM11 */
 /*
- * 低速总线外设(APB1)时钟使能寄存器 RCC_APB1ENR
+ * 低速总线外设(APB1)时钟使能寄存器 APB1ENR
  * 偏移地址: 0x1C
  * 复位值: 0x0000 0000
  * 访问: 没有等待状态, word/half-word/byte访问
  */
-#define RCC_APB1ENR_TIM2EN      ((uint32)0x00000001)        /* TIM2 */
-#define RCC_APB1ENR_TIM3EN      ((uint32)0x00000002)        /* TIM3 */
-#define RCC_APB1ENR_TIM4EN      ((uint32)0x00000004)        /* TIM4 */
-#define RCC_APB1ENR_TIM5EN      ((uint32)0x00000008)        /* TIM5 */
-#define RCC_APB1ENR_TIM6EN      ((uint32)0x00000010)        /* TIM6 */
-#define RCC_APB1ENR_TIM7EN      ((uint32)0x00000020)        /* TIM7 */
-#define RCC_APB1ENR_TIM12EN     ((uint32)0x00000040)        /* TIM12 */
-#define RCC_APB1ENR_TIM13EN     ((uint32)0x00000080)        /* TIM13 */
-#define RCC_APB1ENR_TIM14EN     ((uint32)0x00000100)        /* TIM14 */
-#define RCC_APB1ENR_WWDGEN      ((uint32)0x00000800)        /* WWDG */
-#define RCC_APB1ENR_SPI2EN      ((uint32)0x00004000)        /* SPI2 */
-#define RCC_APB1ENR_SPI3EN      ((uint32)0x00008000)        /* SPI3 */
-#define RCC_APB1ENR_USART2EN    ((uint32)0x00020000)        /* USART2 */
-#define RCC_APB1ENR_USART3EN    ((uint32)0x00040000)        /* USART3 */
-#define RCC_APB1ENR_UART4EN     ((uint32)0x00080000)        /* UART4 */
-#define RCC_APB1ENR_UART5EN     ((uint32)0x00100000)        /* UART5 */ 
-#define RCC_APB1ENR_I2C1EN      ((uint32)0x00200000)        /* I2C1 */
-#define RCC_APB1ENR_I2C2EN      ((uint32)0x00400000)        /* I2C2 */
-#define RCC_APB1ENR_USBEN       ((uint32)0x00800000)        /* USB */
-#define RCC_APB1ENR_CANEN       ((uint32)0x02000000)        /* CAN */
-#define RCC_APB1ENR_BKPEN       ((uint32)0x08000000)        /* Backup interface */
-#define RCC_APB1ENR_PWREN       ((uint32)0x10000000)        /* Power interface */
-#define RCC_APB1ENR_DACEN       ((uint32)0x20000000)        /* DAC interface */
+#define APB1ENR_TIM2EN      ((uint32)0x00000001)        /* TIM2 */
+#define APB1ENR_TIM3EN      ((uint32)0x00000002)        /* TIM3 */
+#define APB1ENR_TIM4EN      ((uint32)0x00000004)        /* TIM4 */
+#define APB1ENR_TIM5EN      ((uint32)0x00000008)        /* TIM5 */
+#define APB1ENR_TIM6EN      ((uint32)0x00000010)        /* TIM6 */
+#define APB1ENR_TIM7EN      ((uint32)0x00000020)        /* TIM7 */
+#define APB1ENR_TIM12EN     ((uint32)0x00000040)        /* TIM12 */
+#define APB1ENR_TIM13EN     ((uint32)0x00000080)        /* TIM13 */
+#define APB1ENR_TIM14EN     ((uint32)0x00000100)        /* TIM14 */
+#define APB1ENR_WWDGEN      ((uint32)0x00000800)        /* WWDG */
+#define APB1ENR_SPI2EN      ((uint32)0x00004000)        /* SPI2 */
+#define APB1ENR_SPI3EN      ((uint32)0x00008000)        /* SPI3 */
+#define APB1ENR_USART2EN    ((uint32)0x00020000)        /* USART2 */
+#define APB1ENR_USART3EN    ((uint32)0x00040000)        /* USART3 */
+#define APB1ENR_UART4EN     ((uint32)0x00080000)        /* UART4 */
+#define APB1ENR_UART5EN     ((uint32)0x00100000)        /* UART5 */ 
+#define APB1ENR_I2C1EN      ((uint32)0x00200000)        /* I2C1 */
+#define APB1ENR_I2C2EN      ((uint32)0x00400000)        /* I2C2 */
+#define APB1ENR_USBEN       ((uint32)0x00800000)        /* USB */
+#define APB1ENR_CANEN       ((uint32)0x02000000)        /* CAN */
+#define APB1ENR_BKPEN       ((uint32)0x08000000)        /* Backup interface */
+#define APB1ENR_PWREN       ((uint32)0x10000000)        /* Power interface */
+#define APB1ENR_DACEN       ((uint32)0x20000000)        /* DAC interface */
 /*
  * 备份控制(Backup Domain Control, BDC)寄存器 RCC_BDCR
  * 偏移地址: 0x20
@@ -328,7 +329,111 @@ typedef struct {
 #define RCC_CSR_IWDGRSTF        ((uint32)0x20000000)        /* 独立看门狗复位标志,硬件置1,软件写1到RMVF清除 */
 #define RCC_CSR_WWDGRSTF        ((uint32)0x40000000)        /* 窗口看门狗复位标志,硬件置1,软件写1到RMVF清除 */
 #define RCC_CSR_LPWRRSTF        ((uint32)0x80000000)        /* 低功耗复位标志,硬件置1,软件写1到RMVF清除  */
+/*
+ * APH外设
+ */
+#define AHB_DMA1        ((uint16)0x0001)
+#define AHB_DMA2        ((uint16)0x0002)
+#define AHB_SRAM        ((uint16)0x0004)
+#define AHB_FLITF       ((uint16)0x0010)
+#define AHB_CRC         ((uint16)0x0040)
+#define AHB_FSMC        ((uint16)0x0100)
+#define AHB_SDIO        ((uint16)0x0400)
+#define AHB_ALL         ((uint16)0x0557)
+#define is_ahb(p) ((0 != p) && (0 == ((p) & (~AHB_ALL))))
+/*
+ * APB2外设
+ */
+#define APB2_AFIO       ((uint32)0x00000001)
+#define APB2_GPIOA      ((uint32)0x00000004)
+#define APB2_GPIOB      ((uint32)0x00000008)
+#define APB2_GPIOC      ((uint32)0x00000010)
+#define APB2_GPIOD      ((uint32)0x00000020)
+#define APB2_GPIOE      ((uint32)0x00000040)
+#define APB2_GPIOF      ((uint32)0x00000080)
+#define APB2_GPIOG      ((uint32)0x00000100)
+#define APB2_ADC1       ((uint32)0x00000200)
+#define APB2_ADC2       ((uint32)0x00000400)
+#define APB2_TIM1       ((uint32)0x00000800)
+#define APB2_SPI1       ((uint32)0x00001000)
+#define APB2_TIM8       ((uint32)0x00002000)
+#define APB2_USART1     ((uint32)0x00004000)
+#define APB2_ADC3       ((uint32)0x00008000)
+#define APB2_TIM9       ((uint32)0x00080000)
+#define APB2_TIM10      ((uint32)0x00100000)
+#define APB2_TIM11      ((uint32)0x00200000)
+#define APB2_ALL        ((uint32)0x0038FFFD)
+#define is_apb2(p) ((0 != p) && (0 == ((p) & (~APB2_ALL))))
+/*
+ * APB1外设
+ */
+#define APB1_TIM2       ((uint32)0x00000001)
+#define APB1_TIM3       ((uint32)0x00000002)
+#define APB1_TIM4       ((uint32)0x00000004)
+#define APB1_TIM5       ((uint32)0x00000008)
+#define APB1_TIM6       ((uint32)0x00000010)
+#define APB1_TIM7       ((uint32)0x00000020)
+#define APB1_TIM12      ((uint32)0x00000040)
+#define APB1_TIM13      ((uint32)0x00000080)
+#define APB1_TIM14      ((uint32)0x00000100)
+#define APB1_WWDG       ((uint32)0x00000800)
+#define APB1_SPI2       ((uint32)0x00004000)
+#define APB1_SPI3       ((uint32)0x00008000)
+#define APB1_USART2     ((uint32)0x00020000)
+#define APB1_USART3     ((uint32)0x00040000)
+#define APB1_UART4      ((uint32)0x00080000)
+#define APB1_UART5      ((uint32)0x00100000)
+#define APB1_I2C1       ((uint32)0x00200000)
+#define APB1_I2C2       ((uint32)0x00400000)
+#define APB1_USB        ((uint32)0x00800000)
+#define APB1_CAN1       ((uint32)0x02000000)
+#define APB1_BKP        ((uint32)0x08000000)
+#define APB1_PWR        ((uint32)0x10000000)
+#define APB1_DAC        ((uint32)0x20000000)
+#define APB1_CEC        ((uint32)0x40000000)
+#define APB1_ALL        ((uint32)0x7AFEC9FF)
+#define is_apb1(p) ((0 != p) && (0 == ((p) & (~APB1_ALL))))
 
+/*
+ * rcc_switch_apb2_periph_clock - 切换APB2外设的时钟
+ *
+ * @p: 外设,支持位选
+ * @on: 0-关闭,非零-打开
+ */
+void rcc_switch_apb2_periph_clock(uint32 p, int on);
+/*
+ * rcc_switch_apb1_periph_clock - 切换APB1外设的时钟
+ *
+ * @p: 外设,支持位选
+ * @on: 0-关闭,非零-打开
+ */
+void rcc_switch_apb1_periph_clock(uint32 p, int on);
+
+/************************************************/
+/* 系统时钟状态
+ */
+
+/*
+ * rcc_get_sysclk_freq - 获取系统时钟
+ *
+ * return: 系统时钟Hz
+ */
+uint32 rcc_get_sysclk_freq(void);
+
+typedef struct {
+    uint32 SYSCLK;  /* 系统时钟频率,Hz */
+    uint32 HCLK;    /* AHB分频后的频率, Hz */
+    uint32 PCLK1;   /* 低速外设APB1频率, Hz */
+    uint32 PCLK2;   /* 高速外设APB2频率, Hz */
+    uint32 ADCCLK;  /* AD转换频率, Hz */
+} rcc_clocks_t;
+
+/*
+ * rcc_get_clocks_freq - 获取系统各种时钟
+ *
+ * @clocks: 填充数据结构
+ */
+void rcc_get_clocks_freq(rcc_clocks_t *clocks);
 
 
 #endif
