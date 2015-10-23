@@ -1,6 +1,8 @@
 #include <stm32f103rc_gpio.h>
 #include <stm32f103rc_rcc.h>
 #include <stm32f103rc_usart.h>
+#include <stm32f103rc_tim.h>
+#include <core_m3_nvic.h>
 #include <queue.h>
 
 char Uint2C(uint8 a) {
@@ -111,9 +113,69 @@ void UART5_Send_HexArray(uint8 *array, int len) {
     UART5_Send_String("\r\n");
 }
 
+void init_timer(void) {
+    rcc_switch_apb1_periph_clock(APB1_TIM6, 1);
 
+    tim_timebase_t conf;
+    conf.ar_value = 900 - 1;
+    conf.prsc = 80 - 1;
+    tim_init_timebase(TIM6, &conf);
+
+    tim_it_config(TIM6, TIM_IT_Update, 1);
+    tim_switch(TIM6, 1);
+}
+
+void Init_LED(void) {
+    gpio_init_t gpio;
+    rcc_switch_apb2_periph_clock(APB2_GPIOB, 1);
+
+    gpio.pin = GPIO_Pin_12 | GPIO_Pin_13;
+    gpio.mode = GPIO_Mode_Out_PP;
+    gpio.speed = GPIO_Speed_50MHz;
+    gpio_init(GPIOB, &gpio);
+}
+
+#define Light_LED2 		(GPIOB->BRR |= 0x1000)
+#define Light_LED3 		(GPIOB->BRR |= 0x2000)
+#define Light_LED_Both 	(GPIOB->BRR |= 0x3000)
+
+#define Dark_LED2 		(GPIOB->BSRR |= 0x1000)
+#define Dark_LED3		(GPIOB->BSRR |= 0x2000)
+#define Dark_LED_Both	(GPIOB->BSRR |= 0x3000)
+
+void config_nvic(void) {
+    nvic_config_prigroup(NVIC_PriGroup_2);
+    // TIM6 ÷–∂œ≈‰÷√
+    nvic_conf_t conf;
+    conf.IRQn = TIM6_IRQn;
+    conf.pre_prior = 1;
+    conf.sub_prior = 2;
+    conf.enale = 1;
+    nvic_init(&conf);
+}
+
+
+int gJiffies;
 
 int main(void) {
+    Init_LED();
+
     Init_UART5(9600);
     UART5_Send_String("hehehe");
+
+    init_timer();
+    config_nvic();
+	
+    Light_LED2;
+    Light_LED3;
+    gJiffies = 0;
+
+    while (1) {
+        if (0 <= gJiffies && gJiffies < 100)
+            Light_LED_Both;
+        else if (100 <= gJiffies && gJiffies < 200)
+            Dark_LED_Both;
+        else if (gJiffies >= 200)
+            gJiffies = 0;
+    }
 }

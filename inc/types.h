@@ -51,4 +51,12 @@ typedef unsigned char   bool;
 #define UINT16_MAX  65535u
 #define UINT32_MAX  4294967295uL
 
+/************************************************/
+/* ¶ÏÑÔº¯Êý
+*/
+#define assert(e) 
+
+
+
+
 #endif

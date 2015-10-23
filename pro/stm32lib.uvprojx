@@ -427,6 +427,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\lib\stm32f103rc_usart.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f103rc_tim.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lib\stm32f103rc_tim.c</FilePath>
+            </File>
+            <File>
+              <FileName>core_m3_nvic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\lib\core_m3_nvic.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -451,6 +461,11 @@
               <FileName>queue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\init\queue.c</FilePath>
+            </File>
+            <File>
+              <FileName>interrupt.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\init\interrupt.c</FilePath>
             </File>
           </Files>
         </Group>

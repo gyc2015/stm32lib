@@ -47,7 +47,7 @@ typedef struct {
     uint16  RESERVED3;
     volatile uint16 SR;     /* 状态寄存器 */
     uint16  RESERVED4;
-    volatile uint16 EGR;    /* 时间生成寄存器 */
+    volatile uint16 EGR;    /* 事件产生寄存器 */
     uint16  RESERVED5;
     volatile uint16 CCMR1;  /* 捕获/比较模式寄存器1 */
     uint16  RESERVED6;
@@ -333,6 +333,14 @@ typedef struct {
 #define TIM_DCR_DBA     ((uint16)0x001F)    /*!< DMA基地址 DBA[4:0] */
 #define TIM_DCR_DBL     ((uint16)0x1F00)    /*!< DMA连续传送长度 DBL[4:0] */
 
+
+/*
+ * tim_switch - 计时器开关
+ *
+ * @TIMx: 目标计时器
+ * @enable: 是否使能
+ */
+void tim_switch(tim_regs_t *TIMx, uint16 enable);
 /************************************************************************************/
 /* 计数器时基单元
  */
@@ -350,6 +358,7 @@ typedef struct {
 #define TIM_Counter_CenterIF_Down   ((uint16)0x0020)    /* 峰值对齐,只在向下计数时设置比较中断标志 */
 #define TIM_Counter_CenterIF_Up     ((uint16)0x0040)    /* 峰值对齐,    向上                     */
 #define TIM_Counter_CenterIF_Both   ((uint16)0x0060)    /* 峰值对齐,  在两个方向上                */
+#define TIM_Counter_Mode_Mask       (TIM_CR1_DIR | TIM_CR1_CMS)
 #define is_tim_counter_mode(p) (((p) == TIM_Counter_EdgeDir_Up) ||  \
                                 ((p) == TIM_Counter_EdgeDir_Down) || \
                                 ((p) == TIM_Counter_CenterIF_Down) || \
@@ -374,7 +383,29 @@ typedef struct {
 void tim_init_timebase(tim_regs_t *TIMx, const tim_timebase_t *conf);
 
 
+/************************************************************************************/
+/* 计时器的中断配置
+ */
 
+#define TIM_IT_Update   ((uint16)0x0001)
+#define TIM_IT_CC1      ((uint16)0x0002)
+#define TIM_IT_CC2      ((uint16)0x0004)
+#define TIM_IT_CC3      ((uint16)0x0008)
+#define TIM_IT_CC4      ((uint16)0x0010)
+#define TIM_IT_COM      ((uint16)0x0020)
+#define TIM_IT_Trigger  ((uint16)0x0040)
+#define TIM_IT_Break    ((uint16)0x0080)
+#define TIM_IT_ALL      ((uint16)0x00FF)
+#define is_tim_it(p) ((0 != (p)) && (0 == ((p) & (~TIM_IT_ALL))))
+
+/*
+ * tim_it_config - 设置计时器中断
+ *
+ * @TIMx: 目标计时器地址访问
+ * @it: 配置中断项
+ * @enable: 是否使能
+ */
+void tim_it_config(tim_regs_t *TIMx, uint16 it, uint16 enable);
 /************************************************************************************/
 
 

@@ -80,7 +80,7 @@ void usart_switch(usart_regs_t *USARTx, uint16 enable) {
 * usart_it_config - 设置串口中断
 *
 * @USARTx: 目标串口地址访问
-* @it: 配置终端项
+* @it: 配置中断项
 * @enable: 是否使能
 */
 void usart_it_config(usart_regs_t *USARTx, uint16 it, uint16 enable) {
