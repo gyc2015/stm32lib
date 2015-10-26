@@ -14,3 +14,13 @@ void TIM6_IRQHandler(void) {
         gJiffies++;
     }
 }
+
+/*
+ * TIM2_IRQHandler - Timer6
+ */
+void TIM2_IRQHandler(void) {
+    if (TIM_SR_UIF & TIM2->SR) {
+        TIM2->SR &= ~TIM_SR_UIF;
+        gJiffies++;
+    }
+}

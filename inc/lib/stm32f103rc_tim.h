@@ -334,6 +334,15 @@ typedef struct {
 #define TIM_DCR_DBL     ((uint16)0x1F00)    /*!< DMA连续传送长度 DBL[4:0] */
 
 
+#define TIM_Channel_1   1
+#define TIM_Channel_2   2
+#define TIM_Channel_3   3
+#define TIM_Channel_4   4
+#define is_tim_channel(p)   ((p) == TIM_Channel_1 || \
+                             (p) == TIM_Channel_2 || \
+                             (p) == TIM_Channel_3 || \
+                             (p) == TIM_Channel_4)
+
 /*
  * tim_switch - 计时器开关
  *
@@ -364,7 +373,6 @@ typedef struct {
                                 ((p) == TIM_Counter_CenterIF_Down) || \
                                 ((p) == TIM_Counter_CenterIF_Up) || \
                                 ((p) == TIM_Counter_CenterIF_Both))
-
 /*
  * 时钟分频因子
  * 
@@ -381,8 +389,13 @@ typedef struct {
  * @conf: 配置内容
  */
 void tim_init_timebase(tim_regs_t *TIMx, const tim_timebase_t *conf);
-
-
+/*
+ * tim_conf_preload - 配置预装载
+ *
+ * @TIMx: 目标计时器
+ * @enable: 是否使能
+ */
+void tim_conf_preload(tim_regs_t *TIMx, uint16 enable);
 /************************************************************************************/
 /* 计时器的中断配置
  */
@@ -406,13 +419,29 @@ void tim_init_timebase(tim_regs_t *TIMx, const tim_timebase_t *conf);
  * @enable: 是否使能
  */
 void tim_it_config(tim_regs_t *TIMx, uint16 it, uint16 enable);
-/************************************************************************************/
 
+/************************************************************************************/
 
 #define TIM_CCMode_Out      ((uint16)0x0000)    /* 输出比较 */
 #define TIM_CCMode_In_Self  ((uint16)0x0001)    /* ICx映射为TIx输入 */
 #define TIM_CCMode_In_Mate  ((uint16)0x0002)    /* ICx映射为TIy输入,x和y为同组的连个通道 */
 #define TIM_CCMode_In_TRC   ((uint16)0x0003)    /* ICx映射为TRC输入 */
+
+/************************************************************************************/
+/* 输出模式配置
+ */
+typedef struct {
+    uint16 channel;     /* 通道编号 */
+    uint16 ocmode;      /* 输出引脚模式 */
+    uint16 oce;         /* 输出引脚使能 */
+    uint16 ocne;        /* 输出互补引脚使能 */
+    uint16 ocp;         /* 输出引脚极性 */
+    uint16 ocnp;        /* 输出互补引脚极性 */
+    uint16 ocidle;      /* 输出引脚在Idle状态下的输出 */
+    uint16 ocnidle;     /* 输出互补引脚在Idle状态下的输出 */
+    uint16 ocpe;        /* 输出预装载使能 */
+    uint16 ref;         /* 输出参考计数 */
+} tim_occonf_t;
 
 #define TIM_OCMode_Frozen    ((uint16)0x0000)    /* 冻结模式,TIMx_CCR1与TIMx_CNT间的比较对OC1REF不起作用 */
 #define TIM_OCMode_Match_Act ((uint16)0x0010)    /* TIMx_CCR1与TIMx_CNT匹配时,置通道1为有效电平 */
@@ -422,6 +451,38 @@ void tim_it_config(tim_regs_t *TIMx, uint16 it, uint16 enable);
 #define TIM_OCMode_Force_Act ((uint16)0x0050)    /* OC1REF强制高电平 */
 #define TIM_OCMode_PWM1      ((uint16)0x0060)    /* 向上计数时,CNT < CCR1高电平,否则低电平;向下计数时,CNT > CCR1低电平,否则高电平 */
 #define TIM_OCMode_PWM2      ((uint16)0x0070)    /* 与PWM1反向 */
+#define is_tim_ocmode(p) ((p) == TIM_OCMode_Frozen || \
+                          (p) == TIM_OCMode_Match_Act || \
+                          (p) == TIM_OCMode_Match_InA || \
+                          (p) == TIM_OCMode_Toggle || \
+                          (p) == TIM_OCMode_Force_InA || \
+                          (p) == TIM_OCMode_Force_Act || \
+                          (p) == TIM_OCMode_PWM1 || \
+                          (p) == TIM_OCMode_PWM2 )
+
+#define TIM_CCMR_CCS      ((uint16)0x0003)    /* 输出比较/输入捕获选择位 CC1S[1:0] */
+#define TIM_CCMR_OCFE     ((uint16)0x0004)    /* 输出比较1快速模式,只对PWM1和PWM2模式有效 */
+#define TIM_CCMR_OCPE     ((uint16)0x0008)    /* 开启输出比较1预装载功能,只有在更新事件到来时,TIMx_CCR1影子寄存器才装载新值 */
+#define TIM_CCMR_OCM      ((uint16)0x0070)    /* 输出比较1模式,OC1M[2:0] */
+#define TIM_CCMR_OCCE     ((uint16)0x0080)    /* 一旦检测到ETRF输入高电平时,清除OC1REF=0 */
+#define TIM_CCMR_OCMask   (TIM_CCMR_CCS | TIM_CCMR_OCPE | TIM_CCMR_OCM)
+
+
+#define TIM_OCPolarity_High   ((uint16)0x0000)
+#define TIM_OCPolarity_Low    ((uint16)0x0002)
+
+/*
+ * tim_init_oc1 - 配置输出通道1
+ *
+ * @TIMx: 目标计时器
+ * @conf: 配置参数
+ */
+void tim_init_oc(tim_regs_t *TIMx, tim_occonf_t *conf);
+
+
+/************************************************************************************/
+/* 输入模式配置
+ */
 
 #define TIM_IC_Filter_No   ((uint16)0x00)    /* 输入捕获无滤波,f_dts */
 #define TIM_IC_Filter_1_2  ((uint16)0x01)    /* f_sam=f_ckint,  N=2 */

@@ -125,6 +125,72 @@ void init_timer(void) {
     tim_switch(TIM6, 1);
 }
 
+/* 系统频率(MHz) 周期(ms) */
+#define FREQUENCE_SYS 72
+#define CYCLE_TIME_SYS (1.0 / 72000)
+/* 分频系数 */
+#define PRESCALER 80
+/* 计数总数 */
+#define PERIOD 9000
+/* 计数频率(kHz)周期(ms) */
+#define FREQUENCE_COUNT 900
+#define CYCLE_TIME_COUNT (1.0 / 900)
+
+
+void init_timer2(void) {
+    gpio_init_t gpio;
+    tim_timebase_t tconf;
+
+    rcc_switch_apb2_periph_clock(APB2_GPIOA | APB2_AFIO, 1);
+    gpio.pin = GPIO_Pin_0 | GPIO_Pin_1;
+    gpio.mode = GPIO_Mode_AF_PP;
+    gpio.speed = GPIO_Speed_50MHz;
+    gpio_init(GPIOA, &gpio);
+
+    rcc_switch_apb1_periph_clock(APB1_TIM2, 1);
+    tconf.ar_value = PERIOD - 1;
+    tconf.prsc = PRESCALER - 1;
+    tconf.ckd = TIM_CKD_1;
+    tconf.counter_mode = TIM_Counter_EdgeDir_Up;
+    tim_init_timebase(TIM2, &tconf);
+
+    tim_occonf_t occonf;
+    occonf.channel = 1;
+    occonf.oce = 1;
+    occonf.ocmode = TIM_OCMode_PWM1;
+    occonf.ocp = TIM_OCPolarity_High;
+    occonf.ref = 1260;
+    occonf.ocpe = 1;
+    tim_init_oc(TIM2, &occonf);
+
+    occonf.channel = 2;
+    occonf.oce = 1;
+    occonf.ocmode = TIM_OCMode_PWM1;
+    occonf.ocp = TIM_OCPolarity_High;
+    occonf.ref = 1260;
+    occonf.ocpe = 1;
+    tim_init_oc(TIM2, &occonf);
+
+    tim_conf_preload(TIM2, 1);
+    tim_switch(TIM2, 1);
+}
+
+void Init_Motor(void) {
+    gpio_init_t gpio;
+    rcc_switch_apb2_periph_clock(APB2_GPIOA, 1);
+
+    gpio.pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2;
+    gpio.mode = GPIO_Mode_Out_PP;
+    gpio.speed = GPIO_Speed_50MHz;
+    gpio_init(GPIOA, &gpio);
+}
+
+#define ENABLE_MOTOR (GPIOA->BSRR |= 0x0002)
+#define DISABLE_MOTOR (GPIOA->BRR |= 0x0002)
+
+#define FORWARD	(GPIOA->BSRR |= 0x0001)
+#define BACKWARD (GPIOA->BRR |= 0x0001)
+
 void Init_LED(void) {
     gpio_init_t gpio;
     rcc_switch_apb2_periph_clock(APB2_GPIOB, 1);
@@ -148,22 +214,24 @@ void config_nvic(void) {
     // TIM6 中断配置
     nvic_conf_t conf;
     conf.IRQn = TIM6_IRQn;
+    //conf.IRQn = TIM2_IRQn;
     conf.pre_prior = 1;
     conf.sub_prior = 2;
     conf.enale = 1;
     nvic_init(&conf);
 }
 
-
 int gJiffies;
 
 int main(void) {
     Init_LED();
+    Init_Motor();
 
     Init_UART5(9600);
     UART5_Send_String("hehehe");
 
     init_timer();
+    init_timer2();
     config_nvic();
 	
     Light_LED2;
@@ -171,11 +239,15 @@ int main(void) {
     gJiffies = 0;
 
     while (1) {
-        if (0 <= gJiffies && gJiffies < 100)
+        if (0 <= gJiffies && gJiffies < 100) {
+            //FORWARD;
+            //ENABLE_MOTOR;
             Light_LED_Both;
-        else if (100 <= gJiffies && gJiffies < 200)
+        } else if (100 <= gJiffies && gJiffies < 200) {
             Dark_LED_Both;
-        else if (gJiffies >= 200)
+            //DISABLE_MOTOR;
+            //BACKWARD;
+        }  else if (gJiffies >= 200)
             gJiffies = 0;
     }
 }

@@ -42,6 +42,20 @@ void tim_switch(tim_regs_t *TIMx, uint16 enable) {
         TIMx->CR1 &= ~TIM_CR1_CEN;
 }
 
+/*
+ * tim_conf_preload - 配置预装载
+ *
+ * @TIMx: 目标计时器
+ * @enable: 是否使能
+ */
+void tim_conf_preload(tim_regs_t *TIMx, uint16 enable) {
+    assert(is_timer(TIMx));
+    
+    if (enable)
+        TIMx->CR1 |= TIM_CR1_ARPE;
+    else
+        TIMx->CR1 &= ~TIM_CR1_ARPE;
+}
 /************************************************************************************/
 /* 计时器的中断配置
  */
@@ -63,3 +77,60 @@ void tim_it_config(tim_regs_t *TIMx, uint16 it, uint16 enable) {
         TIMx->DIER &= ~it;
 }
 
+/************************************************************************************/
+/* 输出模式配置
+ */
+
+ /*
+ * tim_init_oc1 - 配置输出通道1
+ *
+ * @TIMx: 目标计时器
+ * @conf: 配置参数
+ */
+void tim_init_oc(tim_regs_t *TIMx, tim_occonf_t *conf) {
+    assert(is_advanced_timer(TIMx) || is_general_timer(TIMx));
+    assert(is_tim_channel(conf->channel));
+    assert(is_tim_ocmode(conf->ocmode));
+    uint8 tmp = 0;
+    /* 关闭通道1 */
+    tmp = TIM_CCER_CC1E << ((conf->channel - 1) * 4);
+    TIMx->CCER &= ~tmp;
+    /* 复位输出通道参数 */
+    tmp = 0;
+    tmp |= conf->ocmode;
+    tmp |= (conf->ocpe) ? TIM_CCMR_OCPE : 0;
+    if (conf->channel == TIM_Channel_1 || conf->channel == TIM_Channel_2)
+        TIMx->CCMR1 |= (conf->channel == TIM_Channel_1) ? tmp : (tmp << 8);
+    else
+        TIMx->CCMR2 |= (conf->channel == TIM_Channel_3) ? tmp : (tmp << 8);
+    /* 输出通道参考计数 */
+    switch (conf->channel) {
+    case TIM_Channel_1:
+        TIMx->CCR1 = conf->ref;
+        break;
+    case TIM_Channel_2:
+        TIMx->CCR2 = conf->ref;
+        break;
+    case TIM_Channel_3:
+        TIMx->CCR3 = conf->ref;
+        break;
+    case TIM_Channel_4:
+        TIMx->CCR4 = conf->ref;
+        break;
+    }
+    /* 高级计时器的死区idle设置 */
+    if (is_advanced_timer(TIMx)) {
+        tmp = 0;
+        tmp |= (conf->ocidle | conf->ocnidle);
+        TIMx->CR2 |= tmp << ((conf->channel - 1) * 2);
+    }
+    /* 输出使能 */
+    tmp = 0;
+    tmp |= conf->ocp;
+    tmp |= (conf->oce) ? TIM_CCER_CC1E : 0;
+    if (is_advanced_timer(TIMx)) {
+        tmp |= conf->ocnp;
+        tmp |= (conf->ocne) ? TIM_CCER_CC1NE : 0;
+    }
+    TIMx->CCER |= tmp << ((conf->channel - 1) * 4);
+}
